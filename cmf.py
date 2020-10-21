@@ -1,6 +1,8 @@
 from scipy.special import comb
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
+plt.style.use('seaborn')
+plt.style.use('seaborn-talk')
 
 
 def probabilities_num_alive(m_rate, num_offspring):
@@ -16,8 +18,8 @@ def probabilities_num_alive(m_rate, num_offspring):
 
 
 def plot_probabilities_num_alive(probabilities_list):
-    plt.style.use('seaborn')
-    plt.style.use('seaborn-talk')
+    # plt.style.use('seaborn')
+    # plt.style.use('seaborn-talk')
     plt.title(
         'Probability of each Number of Children Surviving Past 5 Years Old\n When Number of Children Born = ' + str(
             len(probabilities_list) - 1))
@@ -59,8 +61,8 @@ def expected_number_surviving_list(prob_num_alive_list):
 
 
 def plot_expected_number_surviving_list(ex_num_surviving_list):
-    plt.style.use('seaborn')
-    plt.style.use('seaborn-talk')
+    # plt.style.use('seaborn')
+    # plt.style.use('seaborn-talk')
     plt.title('Expected Number of Children Surviving Past 5 Years Old \n Based on Number of Children Born')
     plt.ylabel('Number of Children Surviving')
     plt.xlabel('Number of Children Born')
@@ -87,15 +89,29 @@ def prob_at_least_n_survive(n, prob_num_alive):
 
 def plot_prob_at_least_n_survive_list(prob_at_lst_n_survive_list):
     at_least_num = prob_at_lst_n_survive_list.count(0) + 1
-    plt.style.use('seaborn')
-    plt.style.use('seaborn-talk')
+    # plt.style.use('seaborn')
+    # plt.style.use('seaborn-talk')
     plt.title('Probability That At Least ' + str(
-        at_least_num) + ' Children Survive Past 5 Years Old\n Based on Number of Children Born')
+        at_least_num) + ' Children Survive Past 5 Years Old\n Based on Number of Children Born', fontsize=20)
     plt.ylabel('Probability')
     plt.xlabel('Number of Children Born')
     plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
     x = list(range(at_least_num, len(prob_at_lst_n_survive_list) + at_least_num - 1))
     for a, b in zip(list(range(len(x))), prob_at_lst_n_survive_list[at_least_num - 1:]):
-        plt.text(a, b + 0.01, "{:0.0%}".format(b), ha='center', va='bottom', size=15)
+        plt.text(a, b + 0.01, "{:0.0%}".format(b), ha='right', va='bottom', size=15)
     x = [str(value) for value in x]
     plt.scatter(x, prob_at_lst_n_survive_list[at_least_num - 1:])
+
+
+def plot_final():
+    pre_1800_1_to_ = probabilities_num_alive_list(0.43, 11)
+    prob_at_least_2_surv_1_to_ = prob_at_least_n_survive_list(2, pre_1800_1_to_)
+    plot_prob_at_least_n_survive_list(prob_at_least_2_surv_1_to_)
+    plt.axvline(x=4, label='Pre-1800 Average', linestyle=':', color='r', alpha=0.6)
+    plt.text(4.15, 0.35, 'Pre-1800 Average', color='r', fontsize=20)
+    plt.xlim(-0.7, 9.5)
+    plt.ylim(0.27, 1.06)
+    plt.savefig('figures/prob_rep_success.png', dpi=300)
+
+
+
